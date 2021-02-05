@@ -28,9 +28,6 @@ public class Servidor {
 				sc = servidor.accept();
 				System.out.println("Se ha conectado " + sc.getInetAddress() +" desde su puerto " +sc.getLocalPort());
 	
-				if() {
-					
-				}
 				entrada = new DataInputStream(sc.getInputStream());
 				
 				//Leemos la respuesta

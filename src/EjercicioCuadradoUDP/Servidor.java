@@ -32,18 +32,18 @@ public class Servidor {
 				System.out.println("--------------------------");		
 				
 				String datos = new String(paqueteRecibido.getData());
-				System.out.println(datos);
+				System.out.println(datos.trim());
 				
-				int num = Integer.parseInt(datos);
+				int num = Integer.parseInt(datos.trim());
 				
 				System.out.println(num);
 				int cuadrado = num * num;	
-				System.out.println(cuadrado);
+
 				
 				//Obtenemos el puerto del que ha enviado el paquete
 				//Enviamos mensaje al cliente
 				int puertoCliente = paqueteRecibido.getPort();
-				System.out.println(puertoCliente);
+
 				InetAddress direccion = paqueteRecibido.getAddress();
 	
 				datos = ""+cuadrado; 
