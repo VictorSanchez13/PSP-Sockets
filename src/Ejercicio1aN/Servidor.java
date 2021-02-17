@@ -13,7 +13,7 @@ public class Servidor {
 		Socket sc = null;
 		Scanner in = new Scanner(System.in);
 		DataInputStream entrada;
-		int num = 0;
+
 		
 		try {
 					
@@ -24,28 +24,23 @@ public class Servidor {
 			
 			System.out.println("Escuchando en el puerto " +listenPort);
 			//Establecemos la comunicacion con el cliente. UN SOLO CLIENTE
-			while(true) {
-				sc = servidor.accept();
-				System.out.println("Se ha conectado " + sc.getInetAddress() +" desde su puerto " +sc.getLocalPort());
-	
+			sc = servidor.accept();
+			System.out.println("Se ha conectado " + sc.getInetAddress() +" desde su puerto " +sc.getLocalPort());
+			
+			while (true) {
 				entrada = new DataInputStream(sc.getInputStream());
 				
-				//Leemos la respuesta
-				System.out.println(entrada.readUTF());
-				System.out.println("--------------------");
-				//Trabajamos con el cliente
-					//Gestionamos datos de entrada y salida
-
-				if(!sc.getKeepAlive()) {
+				if(!entrada.readUTF().toLowerCase().equals("salir")) {
+					System.out.println(entrada.readUTF());
+	
+				}else {
 					System.out.println("Adios cliente");
+					break;
 				}
-				sc.close();
-			}
-			
-			
-			
-			
-			
+	
+			} 
+			 
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

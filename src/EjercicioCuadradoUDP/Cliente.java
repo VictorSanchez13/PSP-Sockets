@@ -38,6 +38,8 @@ public class Cliente {
 			DatagramPacket paqueteRecibido = new DatagramPacket(bufferRes, bufferRes.length);
 			socketUDP.receive(paqueteRecibido);
 			
+			//Recibimos mensaje del servidor
+			
 			System.out.println("Recibiendo mensaje al SERVIDOR");
 			System.out.println("------------------------");
 			

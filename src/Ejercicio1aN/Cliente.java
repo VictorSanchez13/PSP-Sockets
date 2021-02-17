@@ -26,31 +26,26 @@ public class Cliente {
 		try {
 			//2) Hemos establecido la conexion
 			sc = new Socket(DIRECCION, PUERTO);
-//			System.out.println("Puerto local: " + sc.getLocalPort());
-//			System.out.println("Puerto remoto: " + PUERTO);
-//			System.out.println("Host remoto: " + DIRECCION);
-//			
+
 			//3) Trabajamos
 				//Gestionamos datos de entrada y salida
 			salida = new DataOutputStream(sc.getOutputStream());
+			
 			while (true) {
 				System.out.println("Escribe mensaje a enviar: ");
 				
 				String mensaje = in.nextLine();
+				in.next();
+				salida.writeUTF(mensaje);
 				
 				if(mensaje.toLowerCase().equals("salir")) {
 					sc.close();
-				}
-				else {
-					salida.writeUTF(mensaje);
+					break;
 				}
 				
+				
 			}
-			
-			
-			//4) Cerramos la conexion
-			
-			
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
