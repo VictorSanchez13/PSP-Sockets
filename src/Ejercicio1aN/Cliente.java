@@ -7,49 +7,32 @@ import java.util.Scanner;
 
 public class Cliente {
 
-	public static void main(String[] args) {
-		// Lo podemos crear como constantes
-		Scanner in = new Scanner(System.in);
-		DataOutputStream salida;
-		
-		System.out.println("Introduce direccion del servidor: ");
-		String DIRECCION = in.next();
-		
-		System.out.println("Introduce puerto del servidor: ");
-		int PUERTO = in.nextInt();
-		in.nextLine();
-		
-		// 1) Creamos conexion
-		Socket sc;
-		System.out.println("Conectando con el servidor");
-		
-		try {
-			//2) Hemos establecido la conexion
-			sc = new Socket(DIRECCION, PUERTO);
+	final static int puerto = 1234;
+	final static String ip = "127.0.0.1";
 
-			//3) Trabajamos
-				//Gestionamos datos de entrada y salida
-			salida = new DataOutputStream(sc.getOutputStream());
-			
+	public static void main(String[] args) {
+		DataInputStream in;
+		DataOutputStream out;
+		Scanner sc = new Scanner(System.in);
+		try {
+			// 1) Creación del socket
+			Socket soc = new Socket(ip, puerto);
 			while (true) {
-				System.out.println("Escribe mensaje a enviar: ");
-				
-				String mensaje = in.nextLine();
-				in.next();
-				salida.writeUTF(mensaje);
-				
-				if(mensaje.toLowerCase().equals("salir")) {
-					sc.close();
+				System.out.println("Introduce un mensaje para el servidor \n"
+						+"Si desea salir escriba \"salir\" \n"
+						+"Si desea cerrar el servidor escriba \"cerrar\"");
+				String mensaje = sc.nextLine();
+				if (mensaje.toLowerCase().equals("salir")) {
 					break;
 				}
-				
-				
+				out = new DataOutputStream(soc.getOutputStream());
+				out.writeUTF(mensaje);
 			}
-				
+			System.out.println("Cliente cerrado");
+			soc.close();
+			sc.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// TODO: handle exception
 		}
-
 	}
-
 }

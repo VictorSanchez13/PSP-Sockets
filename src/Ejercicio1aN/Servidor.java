@@ -1,50 +1,67 @@
 package Ejercicio1aN;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Servidor {
-	public static void main(String[] args) {
-		// Lo podemos crear como constantes
-		
-		ServerSocket servidor = null;
-		Socket sc = null;
-		Scanner in = new Scanner(System.in);
-		DataInputStream entrada;
+public class Servidor extends Thread {
 
+	static int cont = 0;
+	final static int PUERTO = 1234;
+	static ServerSocket servidor = null;
+	static Socket soc = null;
+	public static void main(String[] args) {
+		// 1)Creación del socket
 		
 		try {
-					
-			System.out.println("Introduce puerto de escucha: ");
-			int listenPort = in.nextInt();
-			
-			servidor = new ServerSocket(listenPort);
-			
-			System.out.println("Escuchando en el puerto " +listenPort);
-			//Establecemos la comunicacion con el cliente. UN SOLO CLIENTE
-			sc = servidor.accept();
-			System.out.println("Se ha conectado " + sc.getInetAddress() +" desde su puerto " +sc.getLocalPort());
-			
-			while (true) {
-				entrada = new DataInputStream(sc.getInputStream());
+			// 2) Asignación de puerto, de IP vamos a utilizar la nuestra
+			servidor = new ServerSocket(PUERTO);
+			System.out.println("Servidor incializado");
+			while (true)// 3)Escuchar, en este intervalor ya estamos escuchando alguna petición por
+						// parte del cliente
+			{
+				soc = servidor.accept();
+				cont++;
 				
-				if(!entrada.readUTF().toLowerCase().equals("salir")) {
-					System.out.println(entrada.readUTF());
+				System.out.println("Cliente "+cont+" se ha conectado");
+				Thread t = new Servidor();
+				t.start();
+
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
-				}else {
-					System.out.println("Adios cliente");
+	public void run() {
+		DataInputStream in;
+		DataOutputStream out;
+		int aux = cont;
+		try {
+			while (true) {
+				
+				in = new DataInputStream(soc.getInputStream());
+				if(in.readUTF().isEmpty()) {
 					break;
 				}
-	
-			} 
-			 
-		
+				String mensaje = in.readUTF();
+				System.out.println("Cliente " + aux + ": " + mensaje);
+				// Escritura de mensajes
+				if (mensaje.toLowerCase().equals("salir")) {
+					Thread.currentThread().interrupt();
+				}else if (mensaje.toLowerCase().equals("cerrar")) {
+					break;
+				}
+			}
+			// Cerramos la conexion
+			soc.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		System.out.println("Cliente desconectado");
 	}
 
 }
